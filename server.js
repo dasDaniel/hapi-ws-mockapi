@@ -43,6 +43,19 @@ server.route({
   }
 });
 
+server.route({
+  method: 'POST',
+  path: '/user',
+  handler: function (request, h) {
+    const { first_name, last_name, email, ip_address } = request.payload;
+    const id = Math.round(Math.random() * 10000); // not the safest way to generate a unique id...
+    const user = { id, first_name, last_name, email, ip_address };
+
+    db.get('users').push(user).write();
+    return db.get('users').find({ id }).value();
+  }
+});
+
 server.start();
 
 console.info(`Server started at ${server.info.uri}`);

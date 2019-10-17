@@ -125,4 +125,27 @@ Let's create a stateful mocking server for a user manager
   ```
   this will return a 400 error when we try to find a user that does not exist.
 
+## Part 7
 
+create a new user
+
+- create a POST route
+- get data from json payload
+- generate id
+- create user object
+- insert object into db
+- query db for created object using id (redundant, but ensures that user is added)
+  ```js
+  server.route({
+    method: 'POST',
+    path: '/user',
+    handler: function (request, h) {
+      const { first_name, last_name, email, ip_address } = request.payload;
+      const id = Math.round(Math.random() * 10000); // not the safest way to generate a unique id...
+      const user = { id, first_name, last_name, email, ip_address };
+
+      db.get('users').push(user).write();
+      return db.get('users').find({ id }).value();
+    }
+  });
+  ```

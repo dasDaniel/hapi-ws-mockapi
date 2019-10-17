@@ -8,6 +8,14 @@ const server = Hapi.server({
   port: PORT,
 })
 
+server.route({
+  method: 'GET',
+  path: '/',
+  handler: function (request, h) {
+    return 'Hello World!';
+  }
+});
+
 server.start();
 
 console.info(`Server started at ${server.info.uri}`);

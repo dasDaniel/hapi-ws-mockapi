@@ -30,6 +30,16 @@ server.route({
   }
 });
 
+server.route({
+  method: 'GET',
+  path: '/user/{userid}',
+  handler: function (request, h) {
+    const { userid } = request.params;
+    const user = db.get('users').find({ id: parseInt(userid, 10) });
+    return user.value();
+  }
+});
+
 server.start();
 
 console.info(`Server started at ${server.info.uri}`);

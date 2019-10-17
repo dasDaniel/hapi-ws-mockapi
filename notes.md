@@ -98,5 +98,20 @@ Let's create a stateful mocking server for a user manager
   ```
   This code will return all the users.
 
+## Part 5
+
+- create a route for single user
+  ```js
+  server.route({
+    method: 'GET',
+    path: '/user/{userid}',
+    handler: function (request, h) {
+      const { userid } = request.params;
+      const user = db.get('users').find({ id: parseInt(userid, 10) });
+      return user.value();
+    }
+  });
+  ```
+  This will find the user in our db and return it
 
 

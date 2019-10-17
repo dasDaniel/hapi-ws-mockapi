@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@hapi/hapi": "^18.4.0"
+    "@hapi/hapi": "^18.4.0",
+    "lowdb": "^1.0.0"
   }
 }

@@ -1,18 +1,32 @@
 const Hapi = require('@hapi/hapi');
 
+const MemorySync = require('lowdb/adapters/Memory')
+const low = require('lowdb')
+const db = low(new MemorySync());
+
+db.defaults(require('./db.json')).write();
+
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 7000;
 
 const server = Hapi.server({
   host: HOST,
   port: PORT,
-})
+});
 
 server.route({
   method: 'GET',
   path: '/',
   handler: function (request, h) {
-    return 'Hello World!';
+    return { message: 'Hello World!' };
+  }
+});
+
+server.route({
+  method: 'GET',
+  path: '/user',
+  handler: function (request, h) {
+    return db.get('users').value();
   }
 });
 

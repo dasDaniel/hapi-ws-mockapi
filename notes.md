@@ -149,3 +149,29 @@ create a new user
     }
   });
   ```
+
+## Part 8 
+
+Add validation to post
+
+- install joi dependency
+  `npm i -s @hapi/joi`
+- add Joi library to server.js
+  `const Joi = require('@hapi/joi');`
+- define user schema
+  ```js
+  const userSchema = Joi.object({
+    first_name: Joi.string().min(3).max(64).required(),
+    last_name: Joi.string().min(3).max(64).required(),
+    email: Joi.string().min(3).max(64).required(),
+    ip_address: Joi.string().min(7).max(15),
+  });
+  ```
+- add validator
+  ```js
+  config: {
+    validate: {
+      payload: userSchema,
+    }
+  }
+  ```

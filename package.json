@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/hapi": "^18.4.0",
+    "@hapi/joi": "^16.1.7",
     "lowdb": "^1.0.0"
   }
 }

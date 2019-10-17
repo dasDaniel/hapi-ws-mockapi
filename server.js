@@ -1,4 +1,5 @@
 const Hapi = require('@hapi/hapi');
+const Joi = require('@hapi/joi');
 
 const MemorySync = require('lowdb/adapters/Memory')
 const low = require('lowdb')
@@ -12,6 +13,14 @@ const PORT = process.env.PORT || 7000;
 const server = Hapi.server({
   host: HOST,
   port: PORT,
+});
+
+
+const userSchema = Joi.object({
+  first_name: Joi.string().min(3).max(64).required(),
+  last_name: Joi.string().min(3).max(64).required(),
+  email: Joi.string().min(3).max(64).required(),
+  ip_address: Joi.string().min(7).max(15),
 });
 
 server.route({
@@ -46,6 +55,11 @@ server.route({
 server.route({
   method: 'POST',
   path: '/user',
+  config: {
+    validate: {
+      payload: userSchema,
+    }
+  },
   handler: function (request, h) {
     const { first_name, last_name, email, ip_address } = request.payload;
     const id = Math.round(Math.random() * 10000); // not the safest way to generate a unique id...

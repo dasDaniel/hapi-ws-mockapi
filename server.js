@@ -36,7 +36,10 @@ server.route({
   handler: function (request, h) {
     const { userid } = request.params;
     const user = db.get('users').find({ id: parseInt(userid, 10) });
-    return user.value();
+    if (user.value() !== undefined) {
+      return user.value();
+    }
+    return h.response({ error: `user id ${userid} not found` }).code(400)
   }
 });
 

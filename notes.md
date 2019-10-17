@@ -114,4 +114,15 @@ Let's create a stateful mocking server for a user manager
   ```
   This will find the user in our db and return it
 
+## Part 6
+
+- add code to handle error
+  ```js
+    if (user.value() !== undefined) {
+      return user.value();
+    }
+    return h.response({ error: `user id ${userid} not found` }).code(400)
+  ```
+  this will return a 400 error when we try to find a user that does not exist.
+
 

@@ -70,6 +70,21 @@ server.route({
   }
 });
 
+server.route({
+  method: 'DELETE',
+  path: '/user/{userid}',
+  handler: function (request, h) {
+    const { userid } = request.params;
+    const user = db.get('users').find({ id: parseInt(userid, 10) });
+    if (user.value() !== undefined) {
+      console.log(user.value())
+      db.get('users').remove({ id: parseInt(userid, 10) }).write();
+      return { message: `user id ${userid} was deleted` }
+    }
+    return h.response({ error: `user id ${userid} not found` }).code(400)
+  }
+});
+
 server.start();
 
 console.info(`Server started at ${server.info.uri}`);

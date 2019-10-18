@@ -1,4 +1,5 @@
 const Hapi = require('@hapi/hapi');
+const Boom = require('@hapi/boom');
 const Joi = require('@hapi/joi');
 
 const MemorySync = require('lowdb/adapters/Memory')
@@ -13,6 +14,13 @@ const PORT = process.env.PORT || 7000;
 const server = Hapi.server({
   host: HOST,
   port: PORT,
+  routes: {
+    validate: {
+      failAction: async (request, h, err) => {
+        throw Boom.badRequest(err.message);
+      }
+    }
+  }
 });
 
 

@@ -230,3 +230,21 @@ Update user (by id) using PUT method.
   });
   ```
   The PUT method implementation expects the new object to be provided as whole. (Unlike PATCH, which allows parts of object to be updated. PATCH is usually more verbose, since it can contain logic)
+
+## Part 11
+
+Add better response on bad schema request
+
+- include Boom library (already a dependency of Hapi, so install not required)
+  `const Boom = require('@hapi/boom');`
+- add a universal route handler as object in `Hapi.server` config
+  ```js
+  routes: {
+    validate: {
+      failAction: async (request, h, err) => {
+        throw Boom.badRequest(err.message);
+      }
+    }
+  }
+  ```
+  Adding this to server during setup, will apply to all routes. This can also be added to routes individually.

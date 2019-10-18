@@ -77,11 +77,31 @@ server.route({
     const { userid } = request.params;
     const user = db.get('users').find({ id: parseInt(userid, 10) });
     if (user.value() !== undefined) {
-      console.log(user.value())
       db.get('users').remove({ id: parseInt(userid, 10) }).write();
       return { message: `user id ${userid} was deleted` }
     }
     return h.response({ error: `user id ${userid} not found` }).code(400)
+  }
+});
+
+server.route({
+  method: 'PUT',
+  path: '/user/{userid}',
+  config: {
+    validate: {
+      payload: userSchema,
+    }
+  },
+  handler: function (request, h) {
+    const { first_name, last_name, email, ip_address } = request.payload;
+    const { userid } = request.params;
+    const id = parseInt(userid, 10);
+    const user = db.get('users').find({ id });
+    if (user.value() !== undefined) {
+      user.assign({ id, first_name, last_name, email, ip_address }).write();
+      return db.get('users').find({ id }).value();
+    }
+    return h.response({ error: `user id ${id} not found` }).code(400)
   }
 });
 

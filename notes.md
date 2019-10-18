@@ -199,3 +199,34 @@ Delete a user
   Check if user exists, then remove and send success message. If user does not exist, it will return an error.
   Because the server has a in-memory state, requesting a valid id twice will fail on second call, since it is being removed. On restart, the state is reset. This can be especially helpful in automated test where you may want the state to mutate in a predictable way.
 
+## Part 10
+
+Update user (by id) using PUT method.
+
+- create a new route
+- use `assign` to update user database in handler
+- add validation
+- code: 
+  ```js
+  server.route({
+    method: 'PUT',
+    path: '/user/{userid}',
+    config: {
+      validate: {
+        payload: userSchema,
+      }
+    },
+    handler: function (request, h) {
+      const { first_name, last_name, email, ip_address } = request.payload;
+      const { userid } = request.params;
+      const id = parseInt(userid, 10);
+      const user = db.get('users').find({ id });
+      if (user.value() !== undefined) {
+        user.assign({ id, first_name, last_name, email, ip_address }).write();
+        return db.get('users').find({ id }).value();
+      }
+      return h.response({ error: `user id ${id} not found` }).code(400)
+    }
+  });
+  ```
+  The PUT method implementation expects the new object to be provided as whole. (Unlike PATCH, which allows parts of object to be updated. PATCH is usually more verbose, since it can contain logic)
